@@ -11,9 +11,10 @@ export default function Snake({ snake }: SnakeProps): React.JSX.Element {
         <>
             {snake.map((segment: Coordinate, index: number) => {
                 const segmentStyle = {
-
+                    left: segment.x * 10,
+                    top: segment.y * 10,
                 }
-                return <View key={index} style={[styles.snake, segmentStyle]}/>
+                return <View key={index} style={[styles.snake, segmentStyle]} />
             })}
         </>
     )
@@ -23,8 +24,8 @@ const styles = StyleSheet.create({
     snake: {
         height: 15,
         width: 15,
-        borderRadius:7,
+        borderRadius: 7,
         backgroundColor: Colors.primary,
-        position:'absolute',
+        position: 'absolute',
     }
 })
