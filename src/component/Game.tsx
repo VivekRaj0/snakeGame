@@ -9,10 +9,11 @@ import { checkGameOver } from '../utils/checkGameOver'
 import Food from './Food'
 import { checkEatsFood } from '../utils/checkEatsFood'
 import { randomFoodPosition } from '../utils/randomFoodPosition'
+import Header from './Header'
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }]; //where snake render when game start
 const FOOD_INITIAL_POSITION = { x: 5, y: 20 }; //where food render when game start
-const GAME_BOUNDS = { xMin: 0, xMax: 32, yMin: 0, yMax: 71 }; //Area of effect
+const GAME_BOUNDS = { xMin: 0, xMax: 32, yMin: 0, yMax: 63 }; //Area of effect
 const MOVE_INTERVAL = 50;
 const SCORE_INCREMENT = 10; //score increases with 10
 
@@ -89,9 +90,25 @@ export default function Game(): React.JSX.Element {
         }
     }
 
+    const pauseGame = () => {
+        setIsPaused(!isPaused);
+    }
+
+    const reloadGame = () => {
+        setSnake(SNAKE_INITIAL_POSITION);
+        setFood(FOOD_INITIAL_POSITION);
+        setIsGameOver(false);
+        setScore(0);
+        setDirection(Direction.Right);
+        setIsPaused(false);
+    }
+
     return (
         <PanGestureHandler onGestureEvent={gestureHandle}>
             <SafeAreaView style={styles.container}>
+                <Header isPaused={isPaused} pauseGame={pauseGame} reloadGame={reloadGame}>
+                    <Text style={{fontSize:22, fontWeight:"bold", color:Colors.primary}}>{score}</Text>
+                </Header>
                 <View style={styles.boundaries}>
                     <Snake snake={snake} />
                     <Food x={food.x} y={food.y} />
