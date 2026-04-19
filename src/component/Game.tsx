@@ -6,10 +6,13 @@ import { PanGestureHandler } from 'react-native-gesture-handler' //for gesture d
 import { Coordinate, Direction, GestureEventType } from '../types/types'
 import Snake from './Snake'
 import { checkGameOver } from '../utils/checkGameOver'
+import Food from './Food'
+import { checkEatsFood } from '../utils/checkEatsFood'
+import { randomFoodPosition } from '../utils/randomFoodPosition'
 
 const SNAKE_INITIAL_POSITION = [{ x: 5, y: 5 }]; //where snake render when game start
 const FOOD_INITIAL_POSITION = { x: 5, y: 20 }; //where food render when game start
-const GAME_BOUNDS = { xMin: 0, xMax: 100, yMin: 0, yMax: 70 }; //Area of effect
+const GAME_BOUNDS = { xMin: 0, xMax: 32, yMin: 0, yMax: 71 }; //Area of effect
 const MOVE_INTERVAL = 50;
 const SCORE_INCREMENT = 10; //score increases with 10
 
@@ -17,9 +20,10 @@ export default function Game(): React.JSX.Element {
 
     const [direction, setDirection] = React.useState<Direction>(Direction.Right);
     const [snake, setSnake] = React.useState<Coordinate[]>(SNAKE_INITIAL_POSITION);
-    const [food, useFood] = React.useState<Coordinate>(FOOD_INITIAL_POSITION);
+    const [food, setFood] = React.useState<Coordinate>(FOOD_INITIAL_POSITION);
     const [isGameOver, setIsGameOver] = React.useState<boolean>(false);
     const [isPaused, setIsPaused] = React.useState<boolean>(false);
+    const [score, setScore] = React.useState<number>(0)
 
     const gestureHandle = (event: GestureEventType) => {
         const { translationX, translationY } = event.nativeEvent;
@@ -76,7 +80,13 @@ export default function Game(): React.JSX.Element {
             default:
                 break;
         }
-        setSnake([newHead, ...snake.slice(0, -1)]);
+        if (checkEatsFood(newHead, food, 2)) {
+            setSnake([newHead, ...snake]);
+            setFood(randomFoodPosition(GAME_BOUNDS.xMax, GAME_BOUNDS.yMax))
+            setScore(score + SCORE_INCREMENT);
+        } else {
+            setSnake([newHead, ...snake.slice(0, -1)]);
+        }
     }
 
     return (
@@ -84,6 +94,7 @@ export default function Game(): React.JSX.Element {
             <SafeAreaView style={styles.container}>
                 <View style={styles.boundaries}>
                     <Snake snake={snake} />
+                    <Food x={food.x} y={food.y} />
                 </View>
             </SafeAreaView>
         </PanGestureHandler>
