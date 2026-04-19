@@ -6,6 +6,7 @@ A beginner-level Snake game built using React Native as part of a hands-on learn
 
 ## 📱 Demo
 
+<img width="720" height="1600" alt="image" src="https://github.com/user-attachments/assets/9adb712b-a19f-4b79-a82a-50e77267ce6e" />
 
 ---
 
