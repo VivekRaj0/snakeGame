@@ -30,7 +30,7 @@ Through this project, I explored:
 
 ## 🛠️ Tech Stack
 - React Native  
-- JavaScript  
+- TypeScript  
 
 ---
 
